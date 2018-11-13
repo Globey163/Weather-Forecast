@@ -23,6 +23,7 @@ public class DBForecastData {
         this.tempTime = tempTime;
         this.temperature = temperature;
         this.mean = mean;
+        this.forecastId = forecastId;
 
     }
 
