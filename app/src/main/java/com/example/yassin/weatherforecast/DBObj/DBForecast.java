@@ -5,7 +5,7 @@ import android.arch.persistence.room.PrimaryKey;
 
 import java.util.Objects;
 
-@Entity
+@Entity(tableName = "forecasts")
 public class DBForecast {
 
     @PrimaryKey
@@ -32,27 +32,7 @@ public class DBForecast {
         return Objects.hash(id);
     }
 
-    public String getApprovedTime() {
-        return approvedTime;
-    }
-
-    public void setApprovedTime(String approvedTime) {
-        this.approvedTime = approvedTime;
-    }
-
-    public float getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(float longitude) {
-        this.longitude = longitude;
-    }
-
-    public float getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(float latitude) {
-        this.latitude = latitude;
-    }
+    public float getLatitude() { return latitude; }
+    public float getLongitude() { return longitude; }
+    public String getApprovedTime() { return approvedTime; }
 }
