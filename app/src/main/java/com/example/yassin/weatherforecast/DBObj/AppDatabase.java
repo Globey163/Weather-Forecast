@@ -16,7 +16,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     private static volatile AppDatabase db;
 
-    static AppDatabase getDb (final Context context){
+    public static AppDatabase getInstance (final Context context){
 
         if (db == null){
             synchronized (AppDatabase.class){
