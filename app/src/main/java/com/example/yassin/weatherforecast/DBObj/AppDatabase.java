@@ -4,6 +4,7 @@ import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
+import android.util.Log;
 
 import com.example.yassin.weatherforecast.DAO.ForecastDAO;
 import com.example.yassin.weatherforecast.DAO.ForecastDataDAO;
@@ -16,7 +17,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     private static volatile AppDatabase db;
 
-    public static AppDatabase getInstance (final Context context){
+    public static AppDatabase buildInstance (final Context context){
 
         if (db == null){
             synchronized (AppDatabase.class){
@@ -25,6 +26,11 @@ public abstract class AppDatabase extends RoomDatabase {
                 }
             }
         }
+
+        return db;
+    }
+
+    public static AppDatabase getInstance() throws Exception {
 
         return db;
     }

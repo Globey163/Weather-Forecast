@@ -11,13 +11,13 @@ public class DBForecast {
     @PrimaryKey
     public int id;
 
-    private float latitude;
-    private float longitude;
+    private double latitude;
+    private double longitude;
 
     private String approvedTime;
 
 
-    public DBForecast(float latitude, float longitude, String approvedTime){
+    public DBForecast(double latitude, double longitude, String approvedTime){
 
         this.latitude = latitude;
         this.longitude = longitude;
@@ -32,7 +32,7 @@ public class DBForecast {
         return Objects.hash(id);
     }
 
-    public float getLatitude() { return latitude; }
-    public float getLongitude() { return longitude; }
+    public double getLatitude() { return latitude; }
+    public double getLongitude() { return longitude; }
     public String getApprovedTime() { return approvedTime; }
 }
