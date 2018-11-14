@@ -16,6 +16,8 @@ public class BackgroundWork extends AsyncTask<Void, Void, Forecast> {
     private double latitude;
     private double longitude;
 
+    String url = "";
+
     public BackgroundWork (double latitude, double longitude){
 
         this.latitude = latitude;
