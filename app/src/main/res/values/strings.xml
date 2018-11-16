@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Weather Forecast</string>
     <string name="get_data">Get forecast</string>
+    <string name="approved_time">Approved Time:</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+
 </resources>
