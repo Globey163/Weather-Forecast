@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.yassin.weatherforecast.DBObj.AppDatabase;
@@ -15,6 +16,12 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String APPROVED_TIME_TEXT = "approvedTimeText";
+
+
+    TextView approvedTimeTextView = null;
+
+
     AppDatabase db = null;
 
     @Override
@@ -22,8 +29,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        approvedTimeTextView = findViewById(R.id.approvedTime);
+
+        if (savedInstanceState != null){
+            approvedTimeTextView.setText(savedInstanceState.getString(APPROVED_TIME_TEXT));
+        }
+
         //Database init
         db = AppDatabase.buildInstance(this);
+
+        /*RecyclerView rvForecast = (RecyclerView) findViewById(R.id.rvForecastData);
+        ForecastAdapter adapter = new ForecastAdapter(null);
+        rvForecast.setAdapter(adapter);
+        rvForecast.setLayoutManager(new LinearLayoutManager(this));
+        */
 
 
         //test code
@@ -44,6 +63,14 @@ public class MainActivity extends AppCompatActivity {
         //if more than 1 hr passed: fetch data
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString(APPROVED_TIME_TEXT, approvedTimeTextView.getText().toString());
+
+    }
+
     public void getForecastData(View view){
 
         EditText latitudeText = (EditText) findViewById(R.id.editTextLatitude);
@@ -53,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
             double latitude = Double.parseDouble(latitudeText.getText().toString());
             double longitude = Double.parseDouble(longitudeText.getText().toString());
-            new BackgroundWork(latitude, longitude).execute();
+            new BackgroundWork(approvedTimeTextView, latitude, longitude).execute();
         }
 
         else{
