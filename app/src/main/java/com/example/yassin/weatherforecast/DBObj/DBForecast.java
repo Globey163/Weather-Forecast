@@ -32,6 +32,7 @@ public class DBForecast {
         return Objects.hash(id);
     }
 
+    public int getId() { return id; }
     public double getLatitude() { return latitude; }
     public double getLongitude() { return longitude; }
     public String getApprovedTime() { return approvedTime; }

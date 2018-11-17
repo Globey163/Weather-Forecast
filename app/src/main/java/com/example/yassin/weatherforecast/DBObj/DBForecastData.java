@@ -8,18 +8,18 @@ import java.util.Objects;
 @Entity(tableName = "forecastData")
 public class DBForecastData {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
 
     private String tempTime;
-    private float temperature;
+    private double temperature;
     private int mean;
 
     private int forecastId;
 
-    public DBForecastData(String tempTime, float temperature, int mean, int forecastId){
+    public DBForecastData(String tempTime, double temperature, int mean, int forecastId){
 
-        this.id = hashCode();
+        //this.id = hashCode();
         this.tempTime = tempTime;
         this.temperature = temperature;
         this.mean = mean;
@@ -34,7 +34,7 @@ public class DBForecastData {
     }
 
     public String getTempTime() { return tempTime; }
-    public float getTemperature() { return temperature; }
+    public double getTemperature() { return temperature; }
     public int getMean() { return mean; }
     public int getForecastId() { return forecastId; }
     public int getId(){ return id; }
