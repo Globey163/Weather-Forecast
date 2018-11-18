@@ -62,7 +62,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
         TextView temperature = viewHolder.temperature;
         TextView mean = viewHolder.mean;
 
-        tempTime.setText(tempTimeString);
+        tempTime.setText(tempTimeString.replaceAll("[a-zA-Z]", " "));
         temperature.setText(temperatureString);
         mean.setText(meanString);
     }

@@ -4,6 +4,6 @@
     <string name="approved_time">Approved Time:</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
-    <string name="offline">Offline</string>
+    <string name="offline">Offline Data</string>
 
 </resources>

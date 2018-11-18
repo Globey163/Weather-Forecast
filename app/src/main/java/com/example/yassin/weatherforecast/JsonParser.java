@@ -20,7 +20,8 @@ public class JsonParser {
 
     public String setAndReturnApprovedTime() throws JSONException {
 
-        return rootObj.getString("approvedTime");
+
+        return rootObj.getString("approvedTime").replaceAll("[a-zA-Z]", " ");
     }
 
     public ArrayList<ForecastData> parseForecastData() throws JSONException {

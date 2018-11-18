@@ -14,7 +14,15 @@ import android.widget.Toast;
 
 import com.example.yassin.weatherforecast.DBObj.AppDatabase;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
+
+    double latitude = 0;
+    double longitude = 0;
 
     TextView approvedTimeTextView = null;
     TextView offlineTextView = null;
@@ -45,9 +53,35 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        if (approvedTimeTextView.getText() != null){
 
+        boolean connectionExists = isThereAConnection();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date currentTime = Calendar.getInstance().getTime();
+
+        if (connectionExists){
+
+            if (approvedTimeTextView.getText() != null && approvedTimeTextView.getText() != ""){
+
+                try {
+                    String dateFromDataString = approvedTimeTextView.getText().toString().substring(15);
+                    Date dateFromData = sdf.parse(dateFromDataString);
+
+                    if ((currentTime.getTime() - dateFromData.getTime()) >= 120*60*1000){
+
+                        Toast toast = Toast.makeText(this, "Refreshing data", Toast.LENGTH_LONG);
+                        toast.show();
+                        System.out.println("time exceeded");
+                        new BackgroundWork(approvedTimeTextView, rvForecast, latitude, longitude, true, this).execute();
+                        offlineTextView.setVisibility(View.INVISIBLE);
+                    }
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
         }
+
         //if approved time has expired --> fetch data based on previous coordinates
         //get from database if offline and give a marker that it may be out of date
         //if more than 1 hr passed: fetch data
@@ -56,8 +90,8 @@ public class MainActivity extends AppCompatActivity {
     public void getForecastData(View view){
 
         boolean connectionExists = isThereAConnection();
-        double latitude = 0;
-        double longitude = 0;
+        latitude = 0;
+        longitude = 0;
 
         EditText latitudeText = (EditText) findViewById(R.id.editTextLatitude);
         EditText longitudeText = (EditText) findViewById(R.id.editTextLongitude);

@@ -47,6 +47,7 @@ public class BackgroundWork extends AsyncTask<Void, Void, Forecast> {
     private String approvedTimeString = null;
 
     private String devUrlString = "https://maceo.sth.kth.se/api/category/pmp3g/version/2/geotype/point/lon/14.333/lat/60.383/";
+    private String realUrlString = "https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/14.333/lat/60.383/data.json";
 
     public BackgroundWork (TextView approvedTimeReference, RecyclerView recyclerViewReference, double latitude, double longitude, boolean connected, Context context){ //skicka in allt som recyclerView har + approved time texten
 
@@ -68,6 +69,7 @@ public class BackgroundWork extends AsyncTask<Void, Void, Forecast> {
         if (connected){
             try {
 
+                //URL url = new URL(realUrlString);
                 URL url = new URL(devUrlString);
                 https = (HttpsURLConnection) url.openConnection();
                 reader = new BufferedReader(new InputStreamReader(https.getInputStream()));
@@ -87,6 +89,7 @@ public class BackgroundWork extends AsyncTask<Void, Void, Forecast> {
             }catch(Exception e){
 
                 Log.e("NETWORK ERROR", e.getMessage());
+                e.printStackTrace();
                 return null;
             }
 
