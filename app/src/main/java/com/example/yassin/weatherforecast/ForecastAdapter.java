@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.yassin.weatherforecast.Model.Forecast;
 import com.example.yassin.weatherforecast.Model.ForecastData;
 
 import java.util.List;
@@ -56,14 +55,56 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
         ForecastData theData = mForecastData.get(i);
         String tempTimeString = mForecastData.get(i).getTempTime();
         String temperatureString = "" + mForecastData.get(i).getTemperature();
-        String meanString = "" + mForecastData.get(i).getMean();
+        String meanString = null;
+
+        switch (mForecastData.get(i).getMean()){
+
+            case 0:
+                meanString = "Clear " + "(" + mForecastData.get(i).getMean() + ")";
+                break;
+
+            case 1:
+                meanString = "Mostly clear " + "(" + mForecastData.get(i).getMean() + ")";
+                break;
+
+            case 2:
+                meanString = "A little cloudy " + "(" + mForecastData.get(i).getMean() + ")";
+                break;
+
+            case 3:
+                meanString = "Partly cloudy " + "(" + mForecastData.get(i).getMean() + ")";
+                break;
+
+            case 4:
+                meanString = "Moderately cloudy " + "(" + mForecastData.get(i).getMean() + ")";
+                break;
+
+            case 5:
+                meanString = "Cloudy " + "(" + mForecastData.get(i).getMean() + ")";
+                break;
+
+            case 6:
+                meanString = "Very cloudy " + "(" + mForecastData.get(i).getMean() + ")";
+                break;
+
+            case 7:
+                meanString = "Extremely cloudy " + "(" + mForecastData.get(i).getMean() + ")";
+                break;
+
+            case 8:
+                meanString = "Blocked sky " + "(" + mForecastData.get(i).getMean() + ")";
+                break;
+
+                default:
+                    meanString = "Error";
+        }
 
         TextView tempTime = viewHolder.tempTime;
         TextView temperature = viewHolder.temperature;
         TextView mean = viewHolder.mean;
 
         tempTime.setText(tempTimeString.replaceAll("[a-zA-Z]", " "));
-        temperature.setText(temperatureString);
+        temperature.setText(temperatureString + " \u2103");
         mean.setText(meanString);
     }
 

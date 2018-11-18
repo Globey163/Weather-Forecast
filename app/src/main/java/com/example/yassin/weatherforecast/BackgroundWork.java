@@ -13,16 +13,12 @@ import com.example.yassin.weatherforecast.DBObj.DBForecastData;
 import com.example.yassin.weatherforecast.Model.Forecast;
 import com.example.yassin.weatherforecast.Model.ForecastData;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -47,7 +43,7 @@ public class BackgroundWork extends AsyncTask<Void, Void, Forecast> {
     private String approvedTimeString = null;
 
     private String devUrlString = "https://maceo.sth.kth.se/api/category/pmp3g/version/2/geotype/point/lon/14.333/lat/60.383/";
-    private String realUrlString = "https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/14.333/lat/60.383/data.json";
+    private String realUrlString = null;
 
     public BackgroundWork (TextView approvedTimeReference, RecyclerView recyclerViewReference, double latitude, double longitude, boolean connected, Context context){ //skicka in allt som recyclerView har + approved time texten
 
@@ -58,6 +54,8 @@ public class BackgroundWork extends AsyncTask<Void, Void, Forecast> {
         this.longitude = longitude;
         this.connected = connected;
         this.context = context;
+
+        realUrlString = "https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/" + this.longitude + "/lat/" + this.latitude + "/data.json";
     }
 
     @Override
@@ -69,8 +67,8 @@ public class BackgroundWork extends AsyncTask<Void, Void, Forecast> {
         if (connected){
             try {
 
-                //URL url = new URL(realUrlString);
-                URL url = new URL(devUrlString);
+                URL url = new URL(realUrlString);
+                //URL url = new URL(devUrlString);
                 https = (HttpsURLConnection) url.openConnection();
                 reader = new BufferedReader(new InputStreamReader(https.getInputStream()));
                 StringBuffer response = new StringBuffer();
@@ -180,8 +178,5 @@ public class BackgroundWork extends AsyncTask<Void, Void, Forecast> {
             adapter = new ForecastAdapter(forecast.getTheData());
             mRecyclerView.get().setAdapter(adapter);
         }
-        //gör toast om något av felen med doInBackground inträffar (forecast = null
-
-
     }
 }

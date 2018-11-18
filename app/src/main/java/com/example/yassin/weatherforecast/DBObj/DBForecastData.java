@@ -19,18 +19,11 @@ public class DBForecastData {
 
     public DBForecastData(String tempTime, double temperature, int mean, int forecastId){
 
-        //this.id = hashCode();
         this.tempTime = tempTime;
         this.temperature = temperature;
         this.mean = mean;
         this.forecastId = forecastId;
 
-    }
-
-    @Override
-    public int hashCode(){
-
-       return Objects.hash(id);
     }
 
     public String getTempTime() { return tempTime; }

@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //View init
         approvedTimeTextView = findViewById(R.id.approvedTime);
         offlineTextView = findViewById(R.id.offline);
         offlineTextView.setVisibility(View.INVISIBLE);
@@ -81,10 +82,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-
-        //if approved time has expired --> fetch data based on previous coordinates
-        //get from database if offline and give a marker that it may be out of date
-        //if more than 1 hr passed: fetch data
     }
 
     public void getForecastData(View view){
