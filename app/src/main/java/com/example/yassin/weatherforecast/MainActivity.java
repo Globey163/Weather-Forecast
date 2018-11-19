@@ -13,16 +13,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.yassin.weatherforecast.DBObj.AppDatabase;
+import com.example.yassin.weatherforecast.DBObj.DBForecast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     double latitude = 0;
     double longitude = 0;
+
+    private static final class SavedCoordinates{
+
+        public static double savedLatitude = 0;
+        public static double savedLongitude = 0;
+    }
 
     TextView approvedTimeTextView = null;
     TextView offlineTextView = null;
@@ -54,13 +62,34 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-
         boolean connectionExists = isThereAConnection();
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date currentTime = Calendar.getInstance().getTime();
 
+
         if (connectionExists){
+
+            Thread getSavedCoordinates = new Thread(){
+
+                @Override
+                public void run() {
+                    try {
+                        List<DBForecast> savedData = AppDatabase.getInstance().forecastDAO().getAllForecasts();
+
+                        if (savedData.size() != 0){
+
+                            SavedCoordinates.savedLatitude = savedData.get(0).getLatitude();
+                            SavedCoordinates.savedLongitude = savedData.get(0).getLongitude();
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+
+            getSavedCoordinates.start();
 
             if (approvedTimeTextView.getText() != null && approvedTimeTextView.getText() != ""){
 
@@ -68,16 +97,17 @@ public class MainActivity extends AppCompatActivity {
                     String dateFromDataString = approvedTimeTextView.getText().toString().substring(15);
                     Date dateFromData = sdf.parse(dateFromDataString);
 
-                    if ((currentTime.getTime() - dateFromData.getTime()) >= 120*60*1000){
+                    if ((currentTime.getTime() - dateFromData.getTime()) >= 1000*60*60*2){
 
                         Toast toast = Toast.makeText(this, "Refreshing data", Toast.LENGTH_LONG);
                         toast.show();
-                        System.out.println("time exceeded");
-                        new BackgroundWork(approvedTimeTextView, rvForecast, latitude, longitude, true, this).execute();
+                        new BackgroundWork(approvedTimeTextView, rvForecast, SavedCoordinates.savedLatitude, SavedCoordinates.savedLongitude, true, this).execute();
                         offlineTextView.setVisibility(View.INVISIBLE);
                     }
 
                 } catch (ParseException e) {
+                    Toast toast = Toast.makeText(this, "Error refreshing data", Toast.LENGTH_LONG);
+                    toast.show();
                     e.printStackTrace();
                 }
             }
@@ -87,8 +117,6 @@ public class MainActivity extends AppCompatActivity {
     public void getForecastData(View view){
 
         boolean connectionExists = isThereAConnection();
-        latitude = 0;
-        longitude = 0;
 
         EditText latitudeText = (EditText) findViewById(R.id.editTextLatitude);
         EditText longitudeText = (EditText) findViewById(R.id.editTextLongitude);
@@ -98,6 +126,14 @@ public class MainActivity extends AppCompatActivity {
             try{
                 latitude = Double.parseDouble(latitudeText.getText().toString());
                 longitude = Double.parseDouble(longitudeText.getText().toString());
+                latitude = Math.round(latitude * 1000000.0) / 1000000.0;
+                longitude = Math.round(longitude * 1000000.0) / 1000000.0;
+                checkCoordinates(latitude, longitude);
+                SavedCoordinates.savedLatitude = latitude;
+                SavedCoordinates.savedLongitude = longitude;
+
+                System.out.println("Latitude: " + latitude + "\n" +
+                                   "Longitude: " + longitude);
                 new BackgroundWork(approvedTimeTextView, rvForecast, latitude, longitude, true, this).execute();
                 offlineTextView.setVisibility(View.INVISIBLE);
 
@@ -122,4 +158,12 @@ public class MainActivity extends AppCompatActivity {
 
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+
+    private void checkCoordinates (double latitude, double longitude) throws CoordinatesOutOfRangeException{
+
+        if ((latitude < 53.0 || latitude > 71) || (longitude < 0 || longitude > 30)){
+            throw new CoordinatesOutOfRangeException();
+        }
+    }
 }
+
